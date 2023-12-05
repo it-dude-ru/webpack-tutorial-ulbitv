@@ -1,5 +1,7 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin'); 
 const path = require('path');
 // Модуль path - стандартный из nodejs используется для корректной обработки путей в разных операционках
+const webpack = require('webpack');
 
 
 module.exports = (env) => {  // env - объект с переменными окружения, которые передаются при запуске скрипта
@@ -11,6 +13,10 @@ module.exports = (env) => {  // env - объект с переменными о�
 			filename: '[name].[contenthash].js',
 			clean: true,
 		},
+		plugins: [
+			new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
+			new webpack.ProgressPlugin(),
+		],
 	};
 };
 
