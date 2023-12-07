@@ -1,11 +1,16 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin'); 
-const path = require('path');
+import path from 'path';
 // Модуль path - стандартный из nodejs используется для корректной обработки путей в разных операционках
-const webpack = require('webpack');
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
+type Mode = 'production' | 'development';
 
-module.exports = (env) => {  // env - объект с переменными окружения, которые передаются при запуске скрипта
-	return {				 // переменная задаётся в package.json в строках типа: "build:dev": "webpack --env mode=development"
+interface EnvVariables {
+	mode: Mode
+}
+
+export default (env: EnvVariables) => {  // env - объект с переменными окружения, которые передаются при запуске скрипта
+	const config: webpack.Configuration = {				 // переменная задаётся в package.json в строках типа: "build:dev": "webpack --env mode=development"
 		mode: env.mode ?? 'development',
 		entry: path.resolve(__dirname, 'src', 'index.ts'),
 		output: {
@@ -30,6 +35,7 @@ module.exports = (env) => {  // env - объект с переменными о�
 			extensions: ['.tsx', '.ts', '.js'],
 		},
 	};
+	return config;
 };
 
 // __dirname - глобальная константа - путь к текущему исполняемому файлу
