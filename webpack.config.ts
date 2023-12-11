@@ -3,6 +3,7 @@ import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import type { Configuration as DevServerConfiguration, Port } from "webpack-dev-server"; //Типы dev server для TS
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 type Mode = 'production' | 'development';
 
@@ -24,11 +25,25 @@ const isDev = env.mode === 'development';
 			clean: true,
 		},
 		plugins: [
+			new MiniCssExtractPlugin({
+				filename: 'css/[name].[contenthash:8].css',
+				chunkFilename: 'css/[name].[contenthash:8].css',
+			}),
 			new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),  // Создаёт index.html по шаблону, подключает в него скрипты при сборке
 			new webpack.ProgressPlugin(),	// Выводит проценты прогресса во время сборки. Просто для прикола.
 		],									// На больших проектах лучше не использовать, потому что будет тормозить процесс. В общем, бесполензная фигня.
 		module: {
-			rules: [
+			rules: [						// Лоадеры. Важен порядок лоадеров.
+				{
+					test: /\.s[ac]ss$/i,
+					use: [
+						MiniCssExtractPlugin.loader,
+						// Translates CSS into CommonJS
+						"css-loader",
+						// Compiles Sass to CSS
+						"sass-loader",
+					],
+				},
 				{
 					test: /\.tsx?$/,
 					use: 'ts-loader',
