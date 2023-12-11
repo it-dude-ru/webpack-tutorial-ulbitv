@@ -2,26 +2,31 @@ import path from 'path';
 // Модуль path - стандартный из nodejs используется для корректной обработки путей в разных операционках
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import type { Configuration as DevServerConfiguration, Port } from "webpack-dev-server"; //Типы dev server для TS
 
 type Mode = 'production' | 'development';
 
 interface EnvVariables {
-	mode: Mode
+	mode: Mode;
+	port: number;
 }
 
 export default (env: EnvVariables) => {  // env - объект с переменными окружения, которые передаются при запуске скрипта
-	const config: webpack.Configuration = {				 // переменная задаётся в package.json в строках типа: "build:dev": "webpack --env mode=development"
+
+const isDev = env.mode === 'development';
+
+	const config: webpack.Configuration = {					// переменная задаётся в package.json в строках типа: "build:dev": "webpack --env mode=development"
 		mode: env.mode ?? 'development',
-		entry: path.resolve(__dirname, 'src', 'index.ts'),
-		output: {
+		entry: path.resolve(__dirname, 'src', 'index.tsx'),  // Entry point - путь до входного файла
+		output: {											// Output - куда записывается результат сборки
 			path: path.resolve(__dirname, 'build'),
-			filename: '[name].[contenthash].js',
+			filename: '[name].[contenthash].js',			// Шаблонн имени файла для обхода кэширования
 			clean: true,
 		},
 		plugins: [
 			new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),  // Создаёт index.html по шаблону, подключает в него скрипты при сборке
-			new webpack.ProgressPlugin(), // Выводит проценты прогресса во время сборки.
-		],
+			new webpack.ProgressPlugin(),	// Выводит проценты прогресса во время сборки. Просто для прикола.
+		],									// На больших проектах лучше не использовать, потому что будет тормозить процесс. В общем, бесполензная фигня.
 		module: {
 			rules: [
 				{
@@ -34,6 +39,11 @@ export default (env: EnvVariables) => {  // env - объект с перемен
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
 		},
+		devtool: isDev ? 'inline-source-map' : false,
+		devServer: isDev ? {
+			port: env.port ?? 3000,
+			open: true,
+		} : undefined,
 	};
 	return config;
 };
