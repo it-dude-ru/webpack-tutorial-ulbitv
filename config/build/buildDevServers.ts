@@ -5,5 +5,6 @@ export function buildDevServers(options: BuildOptions): DevServerConfiguration {
 	return {
 		port: options.port ?? 3000,
 		open: true,
+		historyApiFallback: true, // Работает для дев-сервера. При деплое нужно проксировать запросы в index.html
 	};
 }
