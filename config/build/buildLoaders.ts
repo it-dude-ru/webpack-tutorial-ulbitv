@@ -5,7 +5,15 @@ import { BuildOptions } from "./types/types";
 export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 
 	const isDev = options.mode === 'development';
-	//const isProd = options.mode === 'production';
+
+	const cssLoaedrWithModules = {
+		loader: "css-loader",
+		options: {
+			modules: {
+				localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64:8]',
+			},
+		},
+	};
 
 	// Лоадеры. Важен порядок лоадеров.
 	const scssLoader = {
@@ -13,7 +21,7 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 		use: [
 			isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
 			// Translates CSS into CommonJS
-			"css-loader",
+			cssLoaedrWithModules,
 			// Compiles Sass to CSS
 			"sass-loader",
 		],
