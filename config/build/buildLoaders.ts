@@ -6,6 +6,24 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 
 	const isDev = options.mode === 'development';
 
+	// Лоадеры. Важен порядок лоадеров. Порядок задаётся в return
+
+	const assetLoader = {
+		test: /\.(png|jpg|jpeg|gif)$/i,
+		type: 'asset/resource',
+	};
+
+	// const svgrLoader = {
+	// 	test: /\.svg$/,
+	// 	use: ['@svgr/webpack'],
+	// };
+
+	const svgrLoader = {
+		test: /\.svg$/i,
+		issuer: /\.[jt]sx?$/,
+		use: [{ loader: '@svgr/webpack', options: { icon: true } }],
+	};
+
 	const cssLoaedrWithModules = {
 		loader: "css-loader",
 		options: {
@@ -15,7 +33,6 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 		},
 	};
 
-	// Лоадеры. Важен порядок лоадеров.
 	const scssLoader = {
 		test: /\.s[ac]ss$/i,
 		use: [
@@ -33,5 +50,10 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 		exclude: /node_modules/,
 	};
 
-	return [scssLoader, tsLoader];
+	return [
+		scssLoader,
+		tsLoader,
+		assetLoader,
+		svgrLoader,
+	];
 }
