@@ -1,12 +1,13 @@
 import path from 'path';
 import webpack from 'webpack';
 import { buildWebpack } from './config/build/builsWebpack';
-import { BuildMode, BuildPaths } from './config/build/types/types';
+import { BuildMode, BuildPaths, BuildPlatform } from './config/build/types/types';
 
 interface EnvVariables {
-	mode: BuildMode;
-	port: number;
+	mode?: BuildMode;
+	port?: number;
 	analyzer?: boolean;
+	platform?: BuildPlatform;
 }
 
 export default (env: EnvVariables) => {  // env - объект с переменными окружения, которые передаются при запуске скрипта
@@ -22,7 +23,8 @@ export default (env: EnvVariables) => {  // env - объект с перемен
 		port: env.port ?? 3000,
 		mode: env.mode ?? 'development',
 		paths,
-		analyzer: env.analyzer
+		analyzer: env.analyzer,
+		platform: env.platform ?? 'desktop'
 	});
 	return config;
 };
