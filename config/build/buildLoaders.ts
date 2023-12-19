@@ -1,6 +1,7 @@
 import { ModuleOptions } from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { BuildOptions } from "./types/types";
+import ReactRefreshTypeScript from "react-refresh-typescript";
 
 export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 
@@ -12,11 +13,6 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 		test: /\.(png|jpg|jpeg|gif)$/i,
 		type: 'asset/resource',
 	};
-
-	// const svgrLoader = {
-	// 	test: /\.svg$/,
-	// 	use: ['@svgr/webpack'],
-	// };
 
 	const svgrLoader = {
 		test: /\.svg$/i,
@@ -46,7 +42,17 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 
 	const tsLoader = {
 		test: /\.tsx?$/,
-		use: 'ts-loader',
+		use: [
+			{
+				loader: 'ts-loader',
+				options: {
+					getCustomTransformers: () => ({
+						before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
+					}),
+					transpileOnly: isDev // Отключает проверку типов для ускорения сборки.
+				}						 // Использовать в связке с ForkTsCheckerWebpackPlugin
+			}
+		],
 		exclude: /node_modules/,
 	};
 

@@ -24,9 +24,11 @@ export const App = () => {
 			<div>
 				<User width={50} height={50} />
 			</div>
+			<hr />
 			<Link to={'/about'}>about</Link>
-			<br/>
+			<hr />
 			<Link to={'/shop'}>shop</Link>
+			<hr />
 			<h1 className={classes.value}>{count}</h1>
 			<button className={classes.button} onClick={increment}>Inc</button>
 			<Outlet />

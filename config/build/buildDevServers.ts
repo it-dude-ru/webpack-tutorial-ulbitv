@@ -6,5 +6,6 @@ export function buildDevServers(options: BuildOptions): DevServerConfiguration {
 		port: options.port ?? 3000,
 		open: true,
 		historyApiFallback: true, // Работает для дев-сервера. При деплое нужно проксировать запросы в index.html
+		hot: true, // Обновление элементов страницы без перезагрузки (Hot Module Replacement)
 	};
 }
