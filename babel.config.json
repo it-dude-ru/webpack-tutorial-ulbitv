@@ -1,0 +1,17 @@
+// Файл создан для примера.
+// Настройки заданы в параметрах babelLosder в файле buildLoaders
+// Те настройки и эти взаимозаменяемы.
+// Но тут нет возможности использовать переменную "isDev"
+
+// {
+// 	"presets": [
+// 		"@babel/preset-env",
+// 		"@babel/preset-typescript",
+// 		[
+// 			"@babel/preset-react",
+// 			{
+// 				"runtime": "automatic"
+// 			}
+// 		]
+// 	]
+// }
