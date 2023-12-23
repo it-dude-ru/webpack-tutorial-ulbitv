@@ -12,10 +12,10 @@ export const App = () => {
 
 	return (
 		<div>
-			<h1>
+			<h1 data-testid={'testid'}>
 				Platform = {__PLATFORM__}
 			</h1>
-			<div>
+			<div data-testid={'div'}>
 				<img src={img01} width={250} height={250} alt="" />
 			</div>
 			<div>
